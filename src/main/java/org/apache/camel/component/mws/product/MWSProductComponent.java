@@ -1,4 +1,4 @@
-package org.apache.camel.components.mws.product;
+package org.apache.camel.component.mws.product;
 
 import java.util.Map;
 
