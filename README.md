@@ -1,0 +1,1 @@
+# camel-mws-product
