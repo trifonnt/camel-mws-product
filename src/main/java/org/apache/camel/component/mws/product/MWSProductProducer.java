@@ -1,6 +1,7 @@
 package org.apache.camel.component.mws.product;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,14 +39,17 @@ public class MWSProductProducer extends DefaultProducer {
 
 	@Override
 	public void process(Exchange exchange) throws Exception {
-//		LOG.debug( exchange.getIn().getBody().toString() );
 		LOG.debug("marketplaceId={}, merchantId={}", endpoint.getMarketplaceId(), endpoint.getMerchantId());
+		Message msg = exchange.getOut();
 
 		// Get the searchString from the HTTP Request Parameters(Camel Exchange Header)
 		String searchString = (String) exchange.getIn().getHeader("mwsSearchString");
 		LOG.debug("searchString={}", searchString);
 		if (searchString == null || searchString.isEmpty()) {
-			throw new IllegalArgumentException("SearchString is mandatory!");
+//			throw new IllegalArgumentException("SearchString is mandatory!");
+			msg.setFault( true );
+			msg.setBody("SearchString is mandatory!");
+			return;
 		}
 
 		String searchContext = (String) exchange.getIn().getHeader("mwsSearchContext");

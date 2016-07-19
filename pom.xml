@@ -7,7 +7,7 @@
 
 	<groupId>com.github.trifonnt</groupId>
 	<artifactId>camel-mws-product</artifactId>
-	<version>1.0.0.alpha.1</version>
+	<version>1.0.0-alpha.2</version>
 
 	<name>Camel MWS Product Component</name>
 	<url>https://github.com/trifonnt/camel-mws-product</url>
