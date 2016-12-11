@@ -42,10 +42,17 @@ public class MWSProductEndpoint extends DefaultEndpoint {
 	private String secretAccessKey = "";
 
 
+	/**
+	 * Default Constructor
+	 */
 	public MWSProductEndpoint() {
 		this(null, null);
 	}
 
+	/**
+	 * @param uri
+	 * @param component
+	 */
 	public MWSProductEndpoint(String uri, MWSProductComponent component) {
 		super(uri, component);
 		marketplaceMap.put("DE", "A1PA6795UKMFR9");
@@ -62,7 +69,7 @@ public class MWSProductEndpoint extends DefaultEndpoint {
 
 	@Override
 	public Consumer createConsumer(Processor processor) throws Exception {
-		throw new RuntimeCamelException("Cannot consume from a MWSProduct endpoint: " + getEndpointUri());
+		throw new RuntimeCamelException("Can not consume from a MWSProduct endpoint: " + getEndpointUri());
 	}
 
 	@Override
@@ -72,10 +79,14 @@ public class MWSProductEndpoint extends DefaultEndpoint {
 
 	/**
 	 * Some description of this option, and what it does
+	 * @param marketplaceId 
 	 */
 	public void setMarketplaceId(String marketplaceId) {
 		this.marketplaceId = marketplaceId;
 	}
+	/**
+	 * @return Marketplace Id
+	 */
 	public String getMarketplaceId() {
 //		return marketplaceId;
 		return marketplaceMap.get( marketplaceId );
@@ -83,40 +94,56 @@ public class MWSProductEndpoint extends DefaultEndpoint {
 
 	/**
 	 * Some description of this option, and what it does
+	 * @param mwsUrl 
 	 */
 	public void setMwsUrl(String mwsUrl) {
 		this.mwsUrl = mwsUrl;
 	}
+	/**
+	 * @return MWS URL
+	 */
 	public String getMwsUrl() {
 		return mwsUrl;
 	}
 
 	/**
 	 * Some description of this option, and what it does
+	 * @param merchantId 
 	 */
 	public void setMerchantId(String merchantId) {
 		this.merchantId = merchantId;
 	}
+	/**
+	 * @return Merchant Id
+	 */
 	public String getMerchantId() {
 		return merchantId;
 	}
 
 	/**
 	 * Some description of this option, and what it does
+	 * @param accessKey 
 	 */
 	public void setAccessKey(String accessKey) {
 		this.accessKey = accessKey;
 	}
+	/**
+	 * @return Access Key
+	 */
 	public String getAccessKey() {
 		return accessKey;
 	}
 
 	/**
 	 * Some description of this option, and what it does
+	 * @param secretAccessKey 
 	 */
 	public void setSecretAccessKey(String secretAccessKey) {
 		this.secretAccessKey = secretAccessKey;
 	}
+	/**
+	 * @return Secret Access Key
+	 */
 	public String getSecretAccessKey() {
 		return secretAccessKey;
 	}

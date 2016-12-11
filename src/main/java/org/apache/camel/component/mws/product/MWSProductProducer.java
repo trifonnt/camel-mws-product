@@ -3,8 +3,6 @@ package org.apache.camel.component.mws.product;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.amazonservices.mws.products.MarketplaceWebServiceProductsAsyncClient;
 import com.amazonservices.mws.products.MarketplaceWebServiceProductsClient;
@@ -20,7 +18,7 @@ import com.amazonservices.mws.products.model.ResponseHeaderMetadata;
  */
 public class MWSProductProducer extends DefaultProducer {
 
-	private static final Logger LOG = LoggerFactory.getLogger(MWSProductProducer.class);
+//	private static final Logger LOG = LoggerFactory.getLogger(MWSProductProducer.class);
 
 	private static final String APP_NAME = "Trifon-Camel-MWS-Product-Component"; //TODO - MUST be configurable!
 
@@ -32,6 +30,9 @@ public class MWSProductProducer extends DefaultProducer {
 	private MWSProductEndpoint endpoint;
 
 
+	/**
+	 * @param endpoint
+	 */
 	public MWSProductProducer(MWSProductEndpoint endpoint) {
 		super(endpoint);
 		this.endpoint = endpoint;
@@ -39,21 +40,21 @@ public class MWSProductProducer extends DefaultProducer {
 
 	@Override
 	public void process(Exchange exchange) throws Exception {
-		LOG.debug("marketplaceId={}, merchantId={}", endpoint.getMarketplaceId(), endpoint.getMerchantId());
+		log.debug("marketplaceId={}, merchantId={}", endpoint.getMarketplaceId(), endpoint.getMerchantId());
 		Message msg = exchange.getOut();
 
 		// Get the searchString from the HTTP Request Parameters(Camel Exchange Header)
 		String searchString = (String) exchange.getIn().getHeader("mwsSearchString");
-		LOG.debug("searchString={}", searchString);
+		log.debug("mwsSearchString={}", searchString);
 		if (searchString == null || searchString.isEmpty()) {
 //			throw new IllegalArgumentException("SearchString is mandatory!");
 			msg.setFault( true );
-			msg.setBody("SearchString is mandatory!");
+			msg.setBody("Header [mwsSearchString] is mandatory!");
 			return;
 		}
 
 		String searchContext = (String) exchange.getIn().getHeader("mwsSearchContext");
-		LOG.debug("searchCntext={}", searchContext);
+		log.debug("mwsSearchContext={}", searchContext);
 		if (searchContext == null || searchContext.isEmpty()) {
 			searchContext = "All"; // All, Books, ...
 		}
@@ -75,23 +76,26 @@ public class MWSProductProducer extends DefaultProducer {
 
 			ResponseHeaderMetadata rhmd = response.getResponseHeaderMetadata();
 
-			exchange.getOut().setHeader("MwsRequestId", rhmd.getRequestId());
-			exchange.getOut().setHeader("MwsTimestamp", rhmd.getTimestamp());
-			exchange.getOut().setHeader("MwsQuotaMax", rhmd.getQuotaMax());
-			exchange.getOut().setHeader("MwsQuotaRemaining", rhmd.getQuotaRemaining());
-			exchange.getOut().setHeader("MwsQuotaResetsAt", rhmd.getQuotaResetsAt());
+			msg.setHeader("MwsRequestId", rhmd.getRequestId());
+			msg.setHeader("MwsTimestamp", rhmd.getTimestamp());
+			msg.setHeader("MwsQuotaMax", rhmd.getQuotaMax());
+			msg.setHeader("MwsQuotaRemaining", rhmd.getQuotaRemaining());
+			msg.setHeader("MwsQuotaResetsAt", rhmd.getQuotaResetsAt());
 
-			exchange.getOut().setHeader(Exchange.CONTENT_TYPE, "text/xml");
+			msg.setHeader(Exchange.CONTENT_TYPE, "text/xml");
 			String responseXml = response.toXML();
-			exchange.getOut().setBody( responseXml );
+			msg.setBody( responseXml );
 		} catch (MarketplaceWebServiceProductsException ex) {
 			// @Trifon - TODO - proper Camel route Exception handling!
 			// Exception properties are important for diagnostics.
 			System.out.println("Service Exception:");
 			ResponseHeaderMetadata rhmd = ex.getResponseHeaderMetadata();
 			if (rhmd != null) {
-				System.out.println("RequestId: " + rhmd.getRequestId());
-				System.out.println("Timestamp: " + rhmd.getTimestamp());
+				System.out.println("MwsRequestId"+ rhmd.getRequestId());
+				System.out.println("MwsTimestamp"+ rhmd.getTimestamp());
+				System.out.println("MwsQuotaMax"+ rhmd.getQuotaMax());
+				System.out.println("MwsQuotaRemaining"+ rhmd.getQuotaRemaining());
+				System.out.println("MwsQuotaResetsAt"+ rhmd.getQuotaResetsAt());
 			}
 			System.out.println("Message: " + ex.getMessage());
 			System.out.println("StatusCode: " + ex.getStatusCode());
@@ -101,10 +105,22 @@ public class MWSProductProducer extends DefaultProducer {
 		}
 	}
 
+	/**
+	 * @param accessKey
+	 * @param secretKey
+	 * @param serviceURL
+	 * @return <MarketplaceWebServiceProductsAsyncClient>
+	 */
 	public static MarketplaceWebServiceProductsAsyncClient getClient(String accessKey, String secretKey, String serviceURL) {
 		return getAsyncClient( accessKey, secretKey, serviceURL );
 	}
 
+	/**
+	 * @param accessKey
+	 * @param secretKey
+	 * @param serviceURL
+	 * @return <MarketplaceWebServiceProductsAsyncClient>
+	 */
 	public static synchronized MarketplaceWebServiceProductsAsyncClient getAsyncClient(String accessKey, String secretKey, String serviceURL) {
 		if (client == null) {
 			MarketplaceWebServiceProductsConfig config = new MarketplaceWebServiceProductsConfig();
