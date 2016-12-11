@@ -22,7 +22,7 @@ public class MWSProductProducer extends DefaultProducer {
 
 	private static final Logger LOG = LoggerFactory.getLogger(MWSProductProducer.class);
 
-	private static final String APP_NAME = "Trifon-Camel-MWS-Product-Component";
+	private static final String APP_NAME = "Trifon-Camel-MWS-Product-Component"; //TODO - MUST be configurable!
 
 	private static final String APP_VERSION = "1.0.0";
 
