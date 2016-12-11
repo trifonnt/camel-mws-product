@@ -1,8 +1,11 @@
 package org.apache.camel.component.mws.product;
 
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
-import org.apache.camel.impl.DefaultProducer;
+import org.apache.camel.Processor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.amazonservices.mws.products.MarketplaceWebServiceProductsAsyncClient;
 import com.amazonservices.mws.products.MarketplaceWebServiceProductsClient;
@@ -12,13 +15,11 @@ import com.amazonservices.mws.products.model.ListMatchingProductsRequest;
 import com.amazonservices.mws.products.model.ListMatchingProductsResponse;
 import com.amazonservices.mws.products.model.ResponseHeaderMetadata;
 
-
 /**
- * The MWSProduct producer.
+ * @author trifon
  */
-public class MWSProductProducer extends DefaultProducer {
-
-//	private static final Logger LOG = LoggerFactory.getLogger(MWSProductProducer.class);
+public class MWSProductProcessor implements Processor {
+	private static final Logger LOG = LoggerFactory.getLogger(MWSProductProducer.class);
 
 	private static final String APP_NAME = "Trifon-Camel-MWS-Product-Component"; //TODO - MUST be configurable!
 
@@ -29,23 +30,18 @@ public class MWSProductProducer extends DefaultProducer {
 
 	private MWSProductEndpoint endpoint;
 
-
-	/**
-	 * @param endpoint
-	 */
-	public MWSProductProducer(MWSProductEndpoint endpoint) {
-		super(endpoint);
+	public void setEndpoint(MWSProductEndpoint endpoint) {
 		this.endpoint = endpoint;
 	}
 
 	@Override
 	public void process(Exchange exchange) throws Exception {
-		log.debug("marketplaceId={}, merchantId={}", endpoint.getMarketplaceId(), endpoint.getMerchantId());
+		LOG.debug("marketplaceId={}, merchantId={}", endpoint.getMarketplaceId(), endpoint.getMerchantId());
 		Message msg = exchange.getOut();
 
 		// Get the searchString from the HTTP Request Parameters(Camel Exchange Header)
 		String searchString = exchange.getIn().getHeader("mwsSearchString", String.class);
-		log.debug("mwsSearchString={}", searchString);
+		LOG.debug("mwsSearchString={}", searchString);
 		if (searchString == null || searchString.isEmpty()) {
 //			throw new IllegalArgumentException("SearchString is mandatory!");
 			msg.setFault( true );
@@ -53,8 +49,8 @@ public class MWSProductProducer extends DefaultProducer {
 			return;
 		}
 
-		String searchContext = exchange.getIn().getHeader("mwsSearchContext", String.class);
-		log.debug("mwsSearchContext={}", searchContext);
+		String searchContext = (String) exchange.getIn().getHeader("mwsSearchContext");
+		LOG.debug("mwsSearchContext={}", searchContext);
 		if (searchContext == null || searchContext.isEmpty()) {
 			searchContext = "All"; // All, Books, ...
 		}

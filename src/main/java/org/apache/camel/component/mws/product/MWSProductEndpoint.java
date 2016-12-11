@@ -69,7 +69,8 @@ public class MWSProductEndpoint extends DefaultEndpoint {
 
 	@Override
 	public Consumer createConsumer(Processor processor) throws Exception {
-		throw new RuntimeCamelException("Can not consume from a MWSProduct endpoint: " + getEndpointUri());
+		return new MWSProductConsumer(this, processor);
+//		throw new RuntimeCamelException("Can not consume from a MWSProduct endpoint: " + getEndpointUri());
 	}
 
 	@Override
