@@ -1,5 +1,6 @@
-# camel-mws-product
+[![](https://jitpack.io/v/trifonnt/camel-mws-product.svg)](https://jitpack.io/#trifonnt/camel-mws-product)
 
+# camel-mws-product
 
 Publishing to JitPack
 ===============================================================================
