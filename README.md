@@ -13,6 +13,24 @@ Publishing to JitPack
 https://jitpack.io/com/github/trifonnt/camel-mws-product/1.0.0-alpha.5
 ```
 
+How to use this library in Maven pom.xml
+===============================================================================
+
+```xml
+<repositories>
+	<repository>
+		<id>jitpack.io</id>
+		<url>https://jitpack.io</url>
+	</repository>
+</repositories>
+...
+<dependency>
+	<groupId>com.github.trifonnt</groupId>
+	<artifactId>camel-mws-product</artifactId>
+	<version>1.0.0-alpha.5</version>
+</dependency>
+```
+
 
 Licensing
 =============================================================================== 
