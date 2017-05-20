@@ -15,8 +15,11 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
 		<apache.camel.version>2.18.2</apache.camel.version>
+		<ext-lib-amazon-mws-products.version>1.0.0-alpha.4</ext-lib-amazon-mws-products.version>
 		<slf4j.version>1.7.21</slf4j.version>
+		<log4j.version>1.2.17</log4j.version>
 	</properties>
 
 	<dependencies>
@@ -48,7 +51,7 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
+			<version>${log4j.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -56,7 +59,7 @@
 		<dependency>
 			<groupId>com.github.trifonnt</groupId>
 			<artifactId>ext-lib-amazon-mws-products</artifactId>
-			<version>1.0.0-alpha.4</version>
+			<version>${ext-lib-amazon-mws-products.version}</version>
 		</dependency>
 
 		<!-- Testing -->
